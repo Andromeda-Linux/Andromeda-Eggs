@@ -7,8 +7,7 @@
 sudo su
 cd Andromeda-Eggs
 mv Andromeda-Logo.png eggs-logo.png
-mv eggs-logo.png /Andromeda-Eggs/addons/eggs/theme/
-
+mv /home/(automatycznie wykrywa nazwa uzytkownika)/eggs-logo.png /home/(automatycznie wykrywa nazwa uzytkownika)/Andromeda-Eggs/addons/eggs/theme/calamares/branding/
 if command -v sudo >/dev/null 2>&1; then
     SUDO='sudo'
 else
