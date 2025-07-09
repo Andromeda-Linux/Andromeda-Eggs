@@ -87,7 +87,7 @@
         "/scripts",
         "/syslinux"
     ],
-    "homepage": "https://penguins-eggs.net",
+    "homepage": "https://andromeda-linux.webnode.page/",
     "keywords": [
         "oclif",
         "remaster",
@@ -98,7 +98,7 @@
     "type": "module",
     "oclif": {
         "bin": "eggs",
-        "dirname": "penguins-eggs",
+        "dirname": "andromeda-eggs",
         "commands": "./dist/commands",
         "plugins": [
             "@oclif/plugin-help",
@@ -112,7 +112,7 @@
             }
         }
     },
-    "repository": "pieroproietti/penguins-eggs",
+    "repository": "github.com/Andromeda-Linux/Andromeda-Eggs",
     "scripts": {
         "_postpack": "shx rm -f oclif.manifest.json",
         "_prepack": "oclif manifest && ocl -t linux-x64",
