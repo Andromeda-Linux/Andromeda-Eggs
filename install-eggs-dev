@@ -7,7 +7,7 @@
 sudo su
 cd Andromeda-Eggs
 mv Andromeda-Logo.png eggs-logo.png
-mv eggs-logo.png /Andromeda-Eggs/addons/
+mv eggs-logo.png /Andromeda-Eggs/addons/eggs/theme/
 
 if command -v sudo >/dev/null 2>&1; then
     SUDO='sudo'
