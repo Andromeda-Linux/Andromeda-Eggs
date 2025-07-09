@@ -1,14 +1,34 @@
 #!/bin/bash
 set -Eeuo pipefail
 clear
-echo "Re-onstall Eggs Saving Yolk... Developer"
-# yolk-restore
-sudo rm /var/local/yolk.saved -rf
-sudo mv /var/local/yolk /var/local/yolk.saved
-# removing eggs
-sudo apt purge penguins-eggs -y
-sudo dpkg -i dist/penguins-eggs_*_amd64.deb
-# yolk-restore
-sudo rm /var/local/yolk -rf
-sudo mv /var/local/yolk.saved /var/local/yolk
+echo "Re-install Eggs Saving Yolk... Developer"
+
+# Backup existing yolk
+if [ -d /var/local/yolk ]; then
+    echo "Saving existing yolk to /var/local/yolk.saved..."
+    sudo rm -rf /var/local/yolk.saved
+    sudo mv /var/local/yolk /var/local/yolk.saved
+fi
+
+# Remove existing penguins-eggs package if installed
+if rpm -q penguins-eggs >/dev/null 2>&1; then
+    echo "Removing existing penguins-eggs package..."
+    sudo zypper remove -y penguins-eggs
+fi
+
+# Install new RPM package
+echo "Installing new penguins-eggs package..."
+sudo zypper install -y ./dist/penguins-eggs_*_x86_64.rpm
+
+# Restore yolk backup
+if [ -d /var/local/yolk.saved ]; then
+    echo "Restoring yolk backup..."
+    sudo rm -rf /var/local/yolk
+    sudo mv /var/local/yolk.saved /var/local/yolk
+fi
+
+# Run eggs dad -d
+echo "Running eggs dad -d..."
 sudo eggs dad -d
+
+echo "Reinstall completed successfully."
