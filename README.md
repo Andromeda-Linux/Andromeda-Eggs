@@ -5,7 +5,7 @@ Tool used in andromeda linux ===> based on opensuse
 
 Clone Repo 
 ```bash
-git clone
+git clone https://github.com/Andromeda-Linux/Andromeda-Eggs.git
 ```
 
 Go to file
