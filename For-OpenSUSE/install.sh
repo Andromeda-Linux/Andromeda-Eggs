@@ -1,12 +1,5 @@
 !#/bin/bash
 
-# check if we are on opensuse
-if [ ! -f /etc/os-release ]; then
-    echo "This script is only for OpenSUSE"
-    exit
-fi
-
-
 # check if we are root
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
