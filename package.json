@@ -1,9 +1,9 @@
 {
-    "name": "penguins-eggs",
+    "name": "andromeda-eggs",
     "shortName": "eggs",
-    "description": "A remaster system tool, compatible with Arch, Debian, Devuan, Ubuntu and others",
+    "description": "Tool based on penguins eggs only for opensuse",
     "version": "25.7.9",
-    "author": "Piero Proietti",
+    "author": "Michał Kaczmarzyk",
     "bin": {
         "eggs": "./bin/run.js"
     },
