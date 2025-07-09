@@ -7,7 +7,7 @@
     "bin": {
         "eggs": "./bin/run.js"
     },
-    "bugs": "https://github.com/pieroproietti/penguins-eggs/issues",
+    "bugs": "https://github.com/Andromeda-Linux/Andromeda-Eggs/issues",
     "dependencies": {
         "@oclif/core": "^4.5.0",
         "@oclif/plugin-autocomplete": "^3.2.32",
