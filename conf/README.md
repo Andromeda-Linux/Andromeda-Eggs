@@ -1,6 +1,6 @@
-# Penguins' eggs 
+### Andromeda Eggs 
 
-FROM eggs v9.6.16 I changed a bit, hide mnt to .mnt, and create links to iso and filesystem.squashfs on the nest. Re have a more logic structure, build on the provious one, unchanged.
+Andromeda Eggs ===> Based on Penguins Eggs ===> Andromeda Eggs for opensuse
 
 ## nest (/home/eggs)
 
@@ -44,24 +44,3 @@ It is the simple structure of an iso image.
 You already knw boot and efi, are necessary for UEFI and consist in the copy of efi.
 * isolinux contain the isolinux files for the boot of the livecd.
 * live contain only 3 files, vmliz, initrd.img and filesystem.squashfs who is the compressef for of the omologue directory.
-
-## ovarium
-* bind
-* mkisofs
-* mksquashfs
-* ubind
-* .overlay (moved under nest 2023-11-21)
-
-## Customize your image before to generate it
-if you want more control on the production of your iso, try the new --dry flag, it's instantaneous: will generate filesystem directory, iso structure complete and the related scripts to bind/ubind filesystem, squash it and create iso.
-
-* bind
-* mksquashfs
-* mkiso
-* ubind
-
-**Attention:** this is a new feathure, things can change in the future versions. this morning was just an idea to help myself in the process to test calamares in Ubuntu and Deepin, but I'm sure someones can help me with the refinings.
-
-Feel free to contact me for any suggestions.
-
-https://github.com/pieroproietti/penguins-eggs
