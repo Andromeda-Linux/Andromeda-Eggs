@@ -6,6 +6,19 @@ Tool used in andromeda linux ===> based on opensuse
 Clone Repo 
 ```bash
 git clone
+```
 
-Run Install-eggs-dev
+Go to file
+```bash
+cd Andromeda-Eggs
+```
+
+Add Permission
+```bash
+chmod a+x install.sh
+```
+
+Run Install.sh
+```bash
+install.sh
 ```
