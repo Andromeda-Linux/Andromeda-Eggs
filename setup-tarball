@@ -1,145 +1,89 @@
 #!/bin/bash
 
 #####################################
-# Install penguins-eggs-tarball
+# Install penguins-eggs-tarball for openSUSE only
+
 function install_tarball() {
     EGGS_PACKAGE=$1
     DISTRO=$2
 
     echo ""
-    echo "install package penguins-eggs on ${DISTRO} from ${EGGS_PACKAGE}"
+    echo "Installing penguins-eggs on ${DISTRO} from ${EGGS_PACKAGE}"
     echo ""
 
-    # Controllo se il pacchetto tarball esiste
     if [ ! -f "$EGGS_PACKAGE" ]; then
-         echo "Error: file $EGGS_PACKAGE don't exists."
+        echo "Error: file $EGGS_PACKAGE does not exist."
         exit 1
     fi
 
     EGGS_HOME="/opt/penguins-eggs/"
 
-    # Rimozione di /opt/penguins-eggs se esiste
+    # Remove existing installation
     if [ -d "$EGGS_HOME" ]; then
         $SUDO rm -rf "$EGGS_HOME"
     fi
 
-    # Estrazione e installazione del pacchetto
-    tar -xzf "$EGGS_PACKAGE"
-    if [ $? -ne 0 ]; then
-        echo "Error: not possoble extract $EGGS_PACKAGE."
-        exit 1
-    fi
+    # Extract and install
+    tar -xzf "$EGGS_PACKAGE" || { echo "Error: cannot extract $EGGS_PACKAGE."; exit 1; }
 
     mv eggs penguins-eggs
     $SUDO mv penguins-eggs /opt/
 
-    # Ricreazione dei link per i temi grub/isolinux
+    # Symlinks for grub/isolinux themes
     $SUDO ln -sf "${EGGS_HOME}addons/eggs/theme/livecd/isolinux.main.full.cfg" "${EGGS_HOME}addons/eggs/theme/livecd/isolinux.main.cfg"
     $SUDO ln -sf "${EGGS_HOME}addons/eggs/theme/livecd/grub.main.full.cfg" "${EGGS_HOME}addons/eggs/theme/livecd/grub.main.cfg"
 
     # Bash completions
     if [ -d "/usr/share/bash-completion/completions/" ]; then
-        $SUDO rm -f /usr/share/bash-completion/completions/eggs.bash
         $SUDO ln -sf "${EGGS_HOME}scripts/eggs.bash" /usr/share/bash-completion/completions/eggs.bash
     fi
 
     # Zsh completions
     if [ -d "/usr/share/zsh/functions/Completion/Zsh/" ]; then
-        $SUDO rm -f /usr/share/zsh/functions/Completion/Zsh/_eggs
         $SUDO ln -sf "${EGGS_HOME}scripts/_eggs" /usr/share/zsh/functions/Completion/Zsh/
     fi
 
-    # Icone
+    # Icon
     if [ -d "/usr/share/icons/" ]; then
-        $SUDO rm -f /usr/share/icons/eggs.png
         $SUDO ln -sf "${EGGS_HOME}assets/eggs.png" /usr/share/icons/eggs.png
     fi
 
-    # Manuali
+    # Man page
     if [ -d "/usr/share/man/man1" ]; then
-        $SUDO rm -f /usr/share/man/man1/eggs.1.gz
         $SUDO ln -sf "${EGGS_HOME}manpages/doc/man/eggs.1.gz" /usr/share/man/man1/eggs.1.gz
     fi
 
-    # Link binario
-    $SUDO rm -f /usr/bin/eggs
+    # Binary link
     $SUDO ln -sf "${EGGS_HOME}bin/eggs" /usr/bin/eggs
 
-    # Collegamenti desktop
+    # Desktop shortcuts
     xdg-user-dirs-update --force
     DESKTOP_DIR=$(xdg-user-dir DESKTOP)
     cp "${EGGS_HOME}addons/eggs/adapt/applications/eggs-adapt.desktop" "${DESKTOP_DIR}"
     cp "${EGGS_HOME}assets/penguins-eggs.desktop" "${DESKTOP_DIR}"
+
     for f in "$DESKTOP_DIR"/*.desktop; do
         chmod +x "$f"
-        gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | awk '{print $1}')" 2>&1 > /dev/null
+        gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | awk '{print $1}')" 2>/dev/null
     done
 
-    # Configurazione di base
+    # Basic config
     $SUDO eggs config -n
 
     echo ""
-    echo "$EGGS_PACKAGE was installed."
+    echo "$EGGS_PACKAGE was installed successfully."
     exit 0
 }
 
 #####################################
-# Install Requirements of the distro
+# Install requirements for openSUSE only
+
 function install_requirements() {
-
-    echo "Requirements installations for distro: ${DISTRO}"
+    echo "Installing requirements for openSUSE..."
     echo ""
-   
-    case $DISTRO in
-        aldos)
-            $SUDO ./requirements/aldos/install.sh
-            ;;
-
-        almalinux|rocky)
-            $SUDO ./requirements/rocky/install.sh
-            ;;
-
-        arch)
-            $SUDO ./requirements/arch/install.sh
-            ;;
-        debian)
-            $SUDO ./requirements/debian/install.sh
-            ;;
-        devuan)
-            $SUDO ./requirements/devuan/install.sh
-            ;;
-        fedora)
-            $SUDO ./requirements/fedora/install.sh
-            ;;
-
-        manjaro|biglinux)
-            $SUDO ./requirements/manjarolinux/install.sh
-            ;;
-
-        nobara)
-            $SUDO ./requirements/nobara/install.sh
-            ;;
-
-        openmamba)
-            $SUDO ./requirements/openmamba/install.sh
-            ;;
-
-        opensuse-tumbleweed)
-            $SUDO ./requirements/opensuse/install.sh
-            ;;
-
-        ubuntu|linuxmint)
-            $SUDO ./requirements/ubuntu/install.sh
-            ;;
-
-        *)
-            echo "This distro: $DISTRO is not supported!"
-            exit 1
-            ;;
-    esac
-
+    $SUDO ./requirements/opensuse/install.sh
     echo ""
-    echo "Requirements  of $EGGS_PACKAGE was installed."
+    echo "Requirements for $EGGS_PACKAGE were installed."
 }
 
 #
@@ -147,48 +91,51 @@ function install_requirements() {
 #
 
 clear
-echo "installing penguins-eggs-tarball..."
+echo "Installing penguins-eggs-tarball for openSUSE..."
 echo ""
 
-# Se l'utente è root, abortisci
+# Root check
 if [ "$(id -u)" -eq 0 ]; then
-    echo "dont'use root!"
-    echo "usage: setup /path/to/tarball [requirements]"
+    echo "Do not use root directly!"
+    echo "Usage: setup /path/to/tarball [requirements]"
     exit 1
 fi
 
-# Controllo dei parametri
+# Parameter check
 if [ -z "$1" ]; then
-    echo "Uso: setup /path/to/penguins-eggs-tarball [requisites]"
+    echo "Usage: setup /path/to/penguins-eggs-tarball [requirements]"
     exit 1
 fi
 
-# Rilevamento della distribuzione Linux
+# Detect distro (forced to opensuse)
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     DISTRO=$ID
-#elif [ -f /etc/redhat-release ]; then
-#    DISTRO=$(awk '{print $1}' /etc/redhat-release)
+    if [[ "$DISTRO" != "opensuse" && "$DISTRO" != opensuse* ]]; then
+        echo "Error: This script is for openSUSE only."
+        exit 1
+    fi
 else
     echo "Distro not recognized."
     exit 1
 fi
+
 echo "Distro recognized: ${DISTRO}"
 
-# Determinazione di SUDO
+# Determine SUDO
 if command -v sudo >/dev/null 2>&1; then
     SUDO='sudo'
 elif command -v doas >/dev/null 2>&1; then
     SUDO='doas'
 else
-    echo "Errore: né sudo né doas sono disponibili."
+    echo "Error: neither sudo nor doas is available."
     exit 1
 fi
 
-# Installazione dei requisiti se il secondo parametro è specificato
+# Install requirements if specified
 if [ -n "$2" ]; then
-    install_requirements $DISTRO
+    install_requirements
 fi
 
-# Installazione del pacchetto tarball
-install_tarball $1 $DISTRO
+# Install tarball
+install_tarball "$1" "$DISTRO"
