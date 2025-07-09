@@ -1,4 +1,4 @@
-# Penguins' eggs
+# Andromeda Eggs ===> Based on Penguins Eggs
 # krill.yaml
 ---
 # welcome (put your language, example: it_IT.UTF-8)
@@ -29,12 +29,12 @@ lvmOptions:
   lvDataMountPoint: ''
 
 # users (Here you can put your default user, password, etc)
-name: 'artisan'
-fullname: 'artisan'
-password: 'evolution'
-rootPassword: 'evolution'
+name: 'andromeda-linux'
+fullname: 'andromeda-linux'
+password: 'andromeda'
+rootPassword: 'andromeda'
 autologin: true
-hostname: ''
+hostname: 'andromeda-linux'
 
 # network (leave it unchanged)
 iface: ""
